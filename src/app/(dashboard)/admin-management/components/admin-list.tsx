@@ -41,6 +41,8 @@ export function AdminList({ onEdit, onRefetch }: AdminListProps) {
   const { data, isLoading, error, refetch } = useGetAdminsQuery({ limit, offset })
   const [deleteAdmin] = useDeleteAdminMutation()
 
+  
+
   const handleDelete = async (adminId: string, adminName: string) => {
     if (window.confirm(`Are you sure you want to delete admin "${adminName}"?`)) {
       try {

@@ -87,22 +87,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       console.log('Starting logout process...')
-      // Call logout API (it returns 204, so we don't need to unwrap)
-      await logoutMutation()
-      console.log('Logout API call completed')
+      
+      // Try to call logout API, but don't wait for it
+      logoutMutation().unwrap().catch((error) => {
+        console.error('Logout API error:', error)
+        // Don't throw - just log the error
+      })
+      
+      console.log('Logout API call initiated')
     } catch (error) {
-      console.error('Logout error:', error)
-    } finally {
+      console.error('Logout process error:', error)
+      // Continue with logout even if there's an error
+    }
+    
+    try {
       console.log('Clearing user data and redirecting...')
-      // Always clear user data and redirect, even if API call fails
+      // Always clear user data and redirect immediately
       setUser(null)
       localStorage.removeItem('user')
-      console.log('Redirecting to login page...')
+      console.log('User data cleared')
       
       // Force redirect using window.location to ensure it works
-      console.log('Setting window.location.href to /auth/sign-in')
+      console.log('Redirecting to login page...')
       window.location.href = '/auth/sign-in'
       console.log('Redirect command executed')
+    } catch (error) {
+      console.error('Error during logout cleanup:', error)
+      // Force redirect even if there's an error
+      window.location.href = '/auth/sign-in'
     }
   }
 

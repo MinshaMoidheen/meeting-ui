@@ -25,10 +25,10 @@ import { PasswordInput } from '@/components/password-input'
 import { 
   useCreateUserMutation, 
   useUpdateUserMutation,
-  useGetAdminsQuery,
   type User 
 } from '@/store/api/userApi'
 import { useGetAdminsQuery as useGetAdmins } from '@/store/api/adminApi'
+import { useAuth } from '@/context/auth-context'
 import { toast } from '@/hooks/use-toast'
 
 const workingHoursSchema = z.object({
@@ -68,7 +68,8 @@ const userFormSchema = z.object({
     .optional(),
   refAdmin: z
     .string()
-    .min(1, 'Admin is required'),
+    .min(1, 'Admin is required')
+    .optional(), // Make optional since it will be set automatically for admin users
   designation: z
     .string()
     .trim()
@@ -90,16 +91,25 @@ interface UserFormProps {
 }
 
 export function UserForm({ mode, user, onSuccess, onCancel }: UserFormProps) {
+  const { user: currentUser } = useAuth()
   const [createUser, { isLoading: isCreating }] = useCreateUserMutation()
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
   const { data: adminsData } = useGetAdmins({ limit: 100, offset: 0 })
+
+  // Check if current user is admin (not superadmin)
+  const isAdmin = currentUser?.userType === 'admin'
+  const isSuperAdmin = currentUser?.userType === 'superadmin'
+
+  console.log('Current User:', currentUser)
+  console.log('Is Admin:', isAdmin)
+  console.log('Admins Data:', adminsData)
 
   const form = useForm<UserFormData>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
       email: '',
       password: '',
-      refAdmin: '',
+      refAdmin: isAdmin ? currentUser?._id || '' : '', // Set current admin as refAdmin if user is admin
       designation: '',
       workingHours: {
         punchin: {
@@ -126,17 +136,38 @@ export function UserForm({ mode, user, onSuccess, onCancel }: UserFormProps) {
         workingHours: user.workingHours,
         attendanceCoordinateId: user.attendanceCoordinateId || '',
       })
+    } else if (mode === 'create' && isAdmin) {
+      // For admin users creating new users, set their ID as refAdmin
+      form.setValue('refAdmin', currentUser?._id || '')
     }
-  }, [mode, user, form])
+  }, [mode, user, form, isAdmin, currentUser])
 
   const onSubmit = async (data: UserFormData) => {
+   
     try {
       if (mode === 'create') {
         if (!data.password) {
           form.setError('password', { message: 'Password is required for new users' })
           return
         }
-        await createUser(data).unwrap()
+
+       
+        
+        // Ensure refAdmin is set for admin users
+        const submitData = { 
+          email: data.email,
+          password: data.password!, // Password is guaranteed to exist here
+          refAdmin: isAdmin && currentUser?._id ? currentUser._id : data.refAdmin!,
+          designation: data.designation,
+          workingHours: data.workingHours,
+          attendanceCoordinateId: data.attendanceCoordinateId
+        }
+
+       
+        
+        await createUser(submitData).unwrap()
+
+            
         toast({
           title: 'User Created',
           description: 'User has been successfully created.',
@@ -155,6 +186,12 @@ export function UserForm({ mode, user, onSuccess, onCancel }: UserFormProps) {
         if (!updateData.password) {
           delete updateData.password
         }
+        
+        // Ensure refAdmin is set for admin users during edit
+        if (isAdmin && currentUser?._id) {
+          updateData.refAdmin = currentUser._id
+        }
+        
         await updateUser({ userId: user._id, data: updateData }).unwrap()
         toast({
           title: 'User Updated',
@@ -212,32 +249,35 @@ export function UserForm({ mode, user, onSuccess, onCancel }: UserFormProps) {
             )}
           />
 
-          {/* Admin */}
-          <FormField
-            control={form.control}
-            name="refAdmin"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Admin</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select an admin" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {adminsData?.admins?.map((admin) => (
-                      <SelectItem key={admin._id} value={admin._id}>
-                        {admin.name} ({admin.company})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Admin - Only show for superadmin users */}
+          {isSuperAdmin && (
+            <FormField
+              control={form.control}
+              name="refAdmin"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Admin</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select an admin" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {adminsData?.admins?.map((admin) => (
+                        <SelectItem key={admin._id} value={admin._id}>
+                          {admin.name} ({admin.company})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
+          
           {/* Designation */}
           <FormField
             control={form.control}
@@ -254,93 +294,7 @@ export function UserForm({ mode, user, onSuccess, onCancel }: UserFormProps) {
           />
         </div>
 
-        {/* Working Hours */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium">Working Hours</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Punch In Hours */}
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Punch In Time</h4>
-              <div className="grid grid-cols-2 gap-2">
-                <FormField
-                  control={form.control}
-                  name="workingHours.punchin.from"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>From</FormLabel>
-                      <FormControl>
-                        <Input type="time" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="workingHours.punchin.to"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>To</FormLabel>
-                      <FormControl>
-                        <Input type="time" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            {/* Punch Out Hours */}
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Punch Out Time</h4>
-              <div className="grid grid-cols-2 gap-2">
-                <FormField
-                  control={form.control}
-                  name="workingHours.punchout.from"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>From</FormLabel>
-                      <FormControl>
-                        <Input type="time" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="workingHours.punchout.to"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>To</FormLabel>
-                      <FormControl>
-                        <Input type="time" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Attendance Coordinate ID */}
-        <FormField
-          control={form.control}
-          name="attendanceCoordinateId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Attendance Coordinate ID (Optional)</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter coordinate ID" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      
 
         {/* Actions */}
         <div className="flex justify-end space-x-2">
