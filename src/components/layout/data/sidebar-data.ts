@@ -18,8 +18,8 @@ import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
   user: {
-    name: 'reoring',
-    email: 'reoring@gmail.com',
+    name: 'Guest User',
+    email: 'guest@example.com',
     avatar: '/avatars/default.svg',
   },
   teams: [
@@ -48,11 +48,7 @@ export const sidebarData: SidebarData = {
           url: '/',
           icon: IconHome,
         },
-        {
-          title: 'Course Classes',
-          url: '/course-classes',
-          icon: BookOpen,
-        },
+       
         {
           title: 'Settings',
           url: '/settings',

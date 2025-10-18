@@ -12,6 +12,7 @@ import { Search } from "@/components/search"
 import { ThemeSwitch } from "@/components/theme-switch"
 import { Main } from '@/components/ui/main'
 import { HeaderContainer } from "@/components/ui/header-container"
+import { useAuth } from "@/context/auth-context"
 
 const topNav = [
   {
@@ -41,6 +42,8 @@ const topNav = [
 ]
 
 export default function DashboardPage() {
+  const { user } = useAuth()
+
   return (
     <>
       <Header fixed>
@@ -61,6 +64,36 @@ export default function DashboardPage() {
             </div>
           </>
         </HeaderContainer>
+
+        {/* User Info Card */}
+        {user && (
+          <div className="mb-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Welcome, {user.name || user.email}!</CardTitle>
+                <CardDescription>
+                  You are logged in as a {user.userType}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Email</p>
+                    <p className="text-sm">{user.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">User Type</p>
+                    <p className="text-sm capitalize">{user.userType}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">User ID</p>
+                    <p className="text-sm font-mono text-xs">{user._id}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         <Tabs defaultValue="overview" className="space-y-4">
           <div className="w-full overflow-x-auto pb-2">

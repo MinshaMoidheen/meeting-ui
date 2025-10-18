@@ -11,8 +11,18 @@ import { NavGroup } from './nav-group'
 import { NavUser } from './nav-user'
 import { TeamSwitcher } from './team-switcher'
 import { sidebarData } from './data/sidebar-data'
+import { useAuth } from '@/context/auth-context'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuth()
+
+  // Create user data for sidebar
+  const sidebarUser = user ? {
+    name: user.name || user.email,
+    email: user.email,
+    avatar: '/avatars/default.svg',
+  } : sidebarData.user
+
   return (
     <Sidebar collapsible='icon' variant='floating' {...props}>
       <SidebarHeader>
@@ -24,7 +34,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={sidebarData.user} />
+        <NavUser user={sidebarUser} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

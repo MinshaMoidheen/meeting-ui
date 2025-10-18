@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
+import { useAuth } from '@/context/auth-context'
 
 type UserAuthFormProps = HTMLAttributes<HTMLDivElement>
 
@@ -37,7 +38,7 @@ const formSchema = z.object({
 })
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const { login, isLoading } = useAuth()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,14 +48,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    try {
+      await login(data.email, data.password)
+    } catch (error) {
+      // Error handling is done in the auth context
+      console.error('Login failed:', error)
+    }
   }
 
   return (
