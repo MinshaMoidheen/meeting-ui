@@ -5,6 +5,7 @@ import './adminApi'
 import './userApi'
 import './clientApi'
 import './clientAttendeesApi'
+import './scheduleApi'
 
 // Re-export everything from baseApi
 export * from './baseApi'
