@@ -12,6 +12,8 @@ import {
   IconBrandWhatsapp,
   IconNetwork,
   IconBook,
+  IconUserCheck,
+  IconUserPlus,
 } from '@tabler/icons-react'
 import { AudioWaveform, Command, GalleryVerticalEnd, BookOpen } from 'lucide-react'
 import { type SidebarData } from '../types'
@@ -48,7 +50,16 @@ export const sidebarData: SidebarData = {
           url: '/',
           icon: IconHome,
         },
-       
+        {
+          title: 'Admin Management',
+          url: '/admin-management',
+          icon: IconUserCheck,
+        },
+        {
+          title: 'User Management',
+          url: '/user-management',
+          icon: IconUserPlus,
+        },
         {
           title: 'Settings',
           url: '/settings',

@@ -1,3 +1,4 @@
+import { ADMIN_URL } from '@/constants'
 import { baseApi } from './baseApi'
 
 export interface CreateAdminRequest {
@@ -51,7 +52,7 @@ export const adminApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createAdmin: builder.mutation<CreateAdminResponse, CreateAdminRequest>({
       query: (adminData) => ({
-        url: '/admins',
+        url: ADMIN_URL,
         method: 'POST',
         body: adminData,
         credentials: 'include',
@@ -59,21 +60,21 @@ export const adminApi = baseApi.injectEndpoints({
     }),
     getAdmins: builder.query<GetAdminsResponse, { limit?: number; offset?: number }>({
       query: ({ limit = 20, offset = 0 } = {}) => ({
-        url: `/admins?limit=${limit}&offset=${offset}`,
+        url: `${ADMIN_URL}?limit=${limit}&offset=${offset}`,
         method: 'GET',
         credentials: 'include',
       }),
     }),
     getAdminById: builder.query<{ message: string; admin: Admin }, string>({
       query: (adminId) => ({
-        url: `/admins/${adminId}`,
+        url: `${ADMIN_URL}/${adminId}`,
         method: 'GET',
         credentials: 'include',
       }),
     }),
     updateAdmin: builder.mutation<{ message: string; admin: Admin }, { adminId: string; data: Partial<CreateAdminRequest> }>({
       query: ({ adminId, data }) => ({
-        url: `/admins/${adminId}`,
+        url: `${ADMIN_URL}/${adminId}`,
         method: 'PUT',
         body: data,
         credentials: 'include',
@@ -81,7 +82,7 @@ export const adminApi = baseApi.injectEndpoints({
     }),
     deleteAdmin: builder.mutation<{ message: string }, string>({
       query: (adminId) => ({
-        url: `/admins/${adminId}`,
+        url: `${ADMIN_URL}/${adminId}`,
         method: 'DELETE',
         credentials: 'include',
       }),

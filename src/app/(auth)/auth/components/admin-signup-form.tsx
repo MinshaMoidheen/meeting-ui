@@ -216,7 +216,7 @@ export function AdminSignupForm({ className, ...props }: AdminSignupFormProps) {
             </div>
 
             {/* Working Days */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name='workingDays'
               render={({ field }) => (
@@ -247,7 +247,7 @@ export function AdminSignupForm({ className, ...props }: AdminSignupFormProps) {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <Button className='mt-2' disabled={isLoading}>
               {isLoading ? 'Creating Account...' : 'Create Account'}
