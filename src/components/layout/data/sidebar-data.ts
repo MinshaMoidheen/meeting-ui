@@ -14,6 +14,8 @@ import {
   IconBook,
   IconUserCheck,
   IconUserPlus,
+  IconUsersGroup,
+  IconCalendarEvent,
 } from '@tabler/icons-react'
 import { AudioWaveform, Command, GalleryVerticalEnd, BookOpen } from 'lucide-react'
 import { type SidebarData } from '../types'
@@ -46,6 +48,18 @@ const allSidebarItems: SidebarItem[] = [
     url: '/user-management',
     icon: IconUserPlus,
     allowedRoles: ['admin', 'superadmin'], // Admin and superadmin can see user management
+  },
+  {
+    title: 'Client Management',
+    url: '/client-management',
+    icon: IconUsersGroup,
+    allowedRoles: ['admin', 'superadmin'], // Admin and superadmin can see client management
+  },
+  {
+    title: 'Client Attendees',
+    url: '/client-attendees',
+    icon: IconCalendarEvent,
+    allowedRoles: ['admin', 'superadmin'], // Admin and superadmin can see client attendees
   },
   {
     title: 'Settings',
