@@ -1,41 +1,28 @@
 'use client'
 
 import { Card } from '@/components/ui/card'
-import { UserAuthForm } from '../components/user-auth-form'
+import { AdminSignupForm } from '../components/admin-signup-form'
 
-export default function SignIn() {
+export default function SignUp() {
   return (
     <Card className='p-6'>
       <div className='flex flex-col space-y-4'>
         {/* Header */}
         <div className='flex flex-col space-y-2 text-left'>
           <h1 className='text-2xl font-semibold tracking-tight'>
-            Login
+            Create Admin Account
           </h1>
           <p className='text-sm text-muted-foreground'>
-            Enter your email and password below to log into your account
+            Fill in the details below to create your admin account
           </p>
         </div>
 
         {/* Form */}
-        <UserAuthForm />
-
-        {/* Sign Up Link */}
-        <div className='mt-4 text-center'>
-          <p className='text-sm text-muted-foreground'>
-            Don't have an account?{' '}
-            <a
-              href='/auth/sign-up'
-              className='font-medium text-primary hover:underline'
-            >
-              Sign up
-            </a>
-          </p>
-        </div>
+        <AdminSignupForm />
 
         {/* Terms and Privacy */}
         <p className='mt-4 px-8 text-center text-sm text-muted-foreground'>
-          By clicking login, you agree to our{' '}
+          By creating an account, you agree to our{' '}
           <a
             href='/terms'
             className='underline underline-offset-4 hover:text-primary'

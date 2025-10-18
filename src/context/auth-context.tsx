@@ -48,11 +48,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const result = await loginMutation({ email, password }).unwrap()
       
       const userData: User = {
+        ...result.user,
         _id: result.user._id,
         email: result.user.email,
         name: result.user.name || result.user.email,
         userType: result.userType,
-        ...result.user
       }
       
       setUser(userData)
@@ -86,13 +86,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await logoutMutation().unwrap()
+      console.log('Starting logout process...')
+      // Call logout API (it returns 204, so we don't need to unwrap)
+      await logoutMutation()
+      console.log('Logout API call completed')
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
+      console.log('Clearing user data and redirecting...')
+      // Always clear user data and redirect, even if API call fails
       setUser(null)
       localStorage.removeItem('user')
-      router.push('/auth/sign-in')
+      console.log('Redirecting to login page...')
+      
+      // Force redirect using window.location to ensure it works
+      console.log('Setting window.location.href to /auth/sign-in')
+      window.location.href = '/auth/sign-in'
+      console.log('Redirect command executed')
     }
   }
 

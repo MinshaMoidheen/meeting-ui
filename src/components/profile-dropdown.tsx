@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -17,18 +16,25 @@ import { toast } from '@/hooks/use-toast'
 import { useAuth } from '@/context/auth-context'
 
 export function ProfileDropdown() {
-  const router = useRouter()
   const { user, logout } = useAuth()
 
   const handleLogout = async () => {
     try {
+      console.log('Profile dropdown: Starting logout...')
       await logout()
+      console.log('Profile dropdown: Logout completed')
+      // Redirect is handled in the auth context
       toast({
         title: 'Logged out successfully',
         description: 'You have been logged out of your account.',
       })
     } catch (error) {
-      console.error('Logout error:', error)
+      console.error('Profile dropdown: Logout error:', error)
+      toast({
+        title: 'Logout Error',
+        description: 'There was an error logging out. Please try again.',
+        variant: 'destructive',
+      })
     }
   }
 

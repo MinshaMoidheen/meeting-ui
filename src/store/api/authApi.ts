@@ -5,6 +5,7 @@ export interface LoginRequest {
   password: string
 }
 
+
 export interface LoginResponse {
   message: string
   user: {
@@ -16,6 +17,7 @@ export interface LoginResponse {
   userType: 'user' | 'admin' | 'superadmin'
   accessToken: string
 }
+
 
 export interface User {
   _id: string
@@ -41,6 +43,8 @@ export const authApi = baseApi.injectEndpoints({
         method: 'POST',
         credentials: 'include',
       }),
+      // Handle 204 No Content response
+      transformResponse: () => undefined,
     }),
     refreshToken: builder.mutation<{ accessToken: string }, void>({
       query: () => ({

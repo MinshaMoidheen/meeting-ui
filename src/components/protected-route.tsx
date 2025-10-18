@@ -16,12 +16,13 @@ export function ProtectedRoute({ children, allowedUserTypes }: ProtectedRoutePro
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
-        router.push('/auth/sign-in')
+        // Use replace instead of push to prevent back button issues
+        router.replace('/auth/sign-in')
         return
       }
 
       if (allowedUserTypes && user && !allowedUserTypes.includes(user.userType)) {
-        router.push('/unauthorized')
+        router.replace('/unauthorized')
         return
       }
     }
