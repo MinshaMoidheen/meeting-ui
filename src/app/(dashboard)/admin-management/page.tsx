@@ -13,7 +13,9 @@ import { Main } from '@/components/ui/main'
 import { HeaderContainer } from '@/components/ui/header-container'
 import { AdminList } from './components/admin-list'
 import { AdminForm } from './components/admin-form'
+import { RoleProtectedRoute } from '@/components/role-protected-route'
 import { useAuth } from '@/context/auth-context'
+import { useGetAdminsQuery } from '@/store/api/adminApi'
 
 const topNav = [
   {
@@ -27,9 +29,30 @@ const topNav = [
 export default function AdminManagementPage() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('list')
+  const [editingAdmin, setEditingAdmin] = useState<any>(null)
+  
+  // Get refetch function from the query
+  const { refetch: refetchAdmins } = useGetAdminsQuery({ limit: 20, offset: 0 })
+
+  const handleEdit = (admin: any) => {
+    setEditingAdmin(admin)
+    setActiveTab('edit')
+  }
+
+  const handleSuccess = async () => {
+    setEditingAdmin(null)
+    setActiveTab('list')
+    // Refetch the admin list to show updated data
+    await refetchAdmins()
+  }
+
+  const handleCancel = () => {
+    setEditingAdmin(null)
+    setActiveTab('list')
+  }
 
   return (
-    <>
+    <RoleProtectedRoute allowedRoles={['superadmin']}>
       <Header fixed>
         <TopNav links={topNav} />
         <div className='ml-auto flex items-center space-x-4'>
@@ -55,6 +78,7 @@ export default function AdminManagementPage() {
           <TabsList>
             <TabsTrigger value="list">Admin List</TabsTrigger>
             <TabsTrigger value="create">Create Admin</TabsTrigger>
+            {editingAdmin && <TabsTrigger value="edit">Edit Admin</TabsTrigger>}
           </TabsList>
 
           <TabsContent value="list" className="space-y-4">
@@ -66,7 +90,7 @@ export default function AdminManagementPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <AdminList onEdit={(admin) => setActiveTab('edit')} />
+                <AdminList onEdit={handleEdit} onRefetch={refetchAdmins} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -82,32 +106,35 @@ export default function AdminManagementPage() {
               <CardContent>
                 <AdminForm 
                   mode="create" 
-                  onSuccess={() => setActiveTab('list')}
-                  onCancel={() => setActiveTab('list')}
+                  onSuccess={handleSuccess}
+                  onCancel={handleCancel}
                 />
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="edit" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Edit Admin</CardTitle>
-                <CardDescription>
-                  Update admin account information
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <AdminForm 
-                  mode="edit" 
-                  onSuccess={() => setActiveTab('list')}
-                  onCancel={() => setActiveTab('list')}
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
+          {editingAdmin && (
+            <TabsContent value="edit" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Edit Admin</CardTitle>
+                  <CardDescription>
+                    Update admin account information
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <AdminForm 
+                    mode="edit" 
+                    admin={editingAdmin}
+                    onSuccess={handleSuccess}
+                    onCancel={handleCancel}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
         </Tabs>
       </Main>
-    </>
+    </RoleProtectedRoute>
   )
 }

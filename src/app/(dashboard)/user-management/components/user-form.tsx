@@ -254,7 +254,93 @@ export function UserForm({ mode, user, onSuccess, onCancel }: UserFormProps) {
           />
         </div>
 
-      
+        {/* Working Hours */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Working Hours</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Punch In Hours */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Punch In Time</h4>
+              <div className="grid grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
+                  name="workingHours.punchin.from"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>From</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="workingHours.punchin.to"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>To</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Punch Out Hours */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Punch Out Time</h4>
+              <div className="grid grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
+                  name="workingHours.punchout.from"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>From</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="workingHours.punchout.to"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>To</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Attendance Coordinate ID */}
+        <FormField
+          control={form.control}
+          name="attendanceCoordinateId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Attendance Coordinate ID (Optional)</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter coordinate ID" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Actions */}
         <div className="flex justify-end space-x-2">

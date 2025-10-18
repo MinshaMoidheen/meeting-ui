@@ -30,9 +30,10 @@ import { MoreHorizontal, Search, Edit, Trash2, Eye } from 'lucide-react'
 
 interface AdminListProps {
   onEdit: (admin: Admin) => void
+  onRefetch?: () => void
 }
 
-export function AdminList({ onEdit }: AdminListProps) {
+export function AdminList({ onEdit, onRefetch }: AdminListProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [limit] = useState(20)
   const [offset, setOffset] = useState(0)
@@ -48,7 +49,12 @@ export function AdminList({ onEdit }: AdminListProps) {
           title: 'Admin Deleted',
           description: 'Admin has been successfully deleted.',
         })
-        refetch()
+        // Refetch data after successful delete
+        await refetch()
+        // Also call parent refetch if provided
+        if (onRefetch) {
+          onRefetch()
+        }
       } catch (error: any) {
         toast({
           title: 'Delete Failed',
@@ -107,7 +113,7 @@ export function AdminList({ onEdit }: AdminListProps) {
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Company</TableHead>
-              
+            
               <TableHead>Created</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>

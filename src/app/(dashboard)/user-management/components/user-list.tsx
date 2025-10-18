@@ -30,9 +30,10 @@ import { MoreHorizontal, Search, Edit, Trash2, Eye, Clock } from 'lucide-react'
 
 interface UserListProps {
   onEdit: (user: User) => void
+  onRefetch?: () => void
 }
 
-export function UserList({ onEdit }: UserListProps) {
+export function UserList({ onEdit, onRefetch }: UserListProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [limit] = useState(20)
   const [offset, setOffset] = useState(0)
@@ -48,7 +49,12 @@ export function UserList({ onEdit }: UserListProps) {
           title: 'User Deleted',
           description: 'User has been successfully deleted.',
         })
-        refetch()
+        // Refetch data after successful delete
+        await refetch()
+        // Also call parent refetch if provided
+        if (onRefetch) {
+          onRefetch()
+        }
       } catch (error: any) {
         toast({
           title: 'Delete Failed',

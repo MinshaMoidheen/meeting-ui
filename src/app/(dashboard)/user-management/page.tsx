@@ -13,7 +13,9 @@ import { Main } from '@/components/ui/main'
 import { HeaderContainer } from '@/components/ui/header-container'
 import { UserList } from './components/user-list'
 import { UserForm } from './components/user-form'
+import { RoleProtectedRoute } from '@/components/role-protected-route'
 import { useAuth } from '@/context/auth-context'
+import { useGetUsersQuery } from '@/store/api/userApi'
 
 const topNav = [
   {
@@ -27,9 +29,30 @@ const topNav = [
 export default function UserManagementPage() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('list')
+  const [editingUser, setEditingUser] = useState<any>(null)
+  
+  // Get refetch function from the query
+  const { refetch: refetchUsers } = useGetUsersQuery({ limit: 20, offset: 0 })
+
+  const handleEdit = (user: any) => {
+    setEditingUser(user)
+    setActiveTab('edit')
+  }
+
+  const handleSuccess = async () => {
+    setEditingUser(null)
+    setActiveTab('list')
+    // Refetch the user list to show updated data
+    await refetchUsers()
+  }
+
+  const handleCancel = () => {
+    setEditingUser(null)
+    setActiveTab('list')
+  }
 
   return (
-    <>
+    <RoleProtectedRoute allowedRoles={['admin', 'superadmin']}>
       <Header fixed>
         <TopNav links={topNav} />
         <div className='ml-auto flex items-center space-x-4'>
@@ -55,6 +78,7 @@ export default function UserManagementPage() {
           <TabsList>
             <TabsTrigger value="list">User List</TabsTrigger>
             <TabsTrigger value="create">Create User</TabsTrigger>
+            {editingUser && <TabsTrigger value="edit">Edit User</TabsTrigger>}
           </TabsList>
 
           <TabsContent value="list" className="space-y-4">
@@ -66,7 +90,7 @@ export default function UserManagementPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <UserList onEdit={(user) => setActiveTab('edit')} />
+                <UserList onEdit={handleEdit} onRefetch={refetchUsers} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -82,32 +106,35 @@ export default function UserManagementPage() {
               <CardContent>
                 <UserForm 
                   mode="create" 
-                  onSuccess={() => setActiveTab('list')}
-                  onCancel={() => setActiveTab('list')}
+                  onSuccess={handleSuccess}
+                  onCancel={handleCancel}
                 />
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="edit" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Edit User</CardTitle>
-                <CardDescription>
-                  Update user account information
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <UserForm 
-                  mode="edit" 
-                  onSuccess={() => setActiveTab('list')}
-                  onCancel={() => setActiveTab('list')}
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
+          {editingUser && (
+            <TabsContent value="edit" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Edit User</CardTitle>
+                  <CardDescription>
+                    Update user account information
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <UserForm 
+                    mode="edit" 
+                    user={editingUser}
+                    onSuccess={handleSuccess}
+                    onCancel={handleCancel}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
         </Tabs>
       </Main>
-    </>
+    </RoleProtectedRoute>
   )
 }

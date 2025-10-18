@@ -232,39 +232,7 @@ export function AdminForm({ mode, admin, onSuccess, onCancel }: AdminFormProps) 
           />
         </div>
 
-        {/* Working Days */}
-        {/* <FormField
-          control={form.control}
-          name="workingDays"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Working Days</FormLabel>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {workingDays.map((day) => (
-                  <div key={day.key} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={day.key}
-                      checked={field.value[day.key]}
-                      onCheckedChange={(checked) => {
-                        field.onChange({
-                          ...field.value,
-                          [day.key]: checked,
-                        })
-                      }}
-                    />
-                    <label
-                      htmlFor={day.key}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {day.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
+       
 
         {/* Actions */}
         <div className="flex justify-end space-x-2">

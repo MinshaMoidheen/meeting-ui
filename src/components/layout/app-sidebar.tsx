@@ -10,11 +10,14 @@ import {
 import { NavGroup } from './nav-group'
 import { NavUser } from './nav-user'
 import { TeamSwitcher } from './team-switcher'
-import { sidebarData } from './data/sidebar-data'
+import { getSidebarData } from './data/sidebar-data'
 import { useAuth } from '@/context/auth-context'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuth()
+
+  // Get sidebar data based on user role
+  const sidebarData = getSidebarData(user?.userType as any)
 
   // Create user data for sidebar
   const sidebarUser = user ? {
