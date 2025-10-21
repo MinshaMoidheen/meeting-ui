@@ -20,9 +20,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Badge } from '@/components/ui/badge'
-import { MoreHorizontal, Search, Edit, Trash2, Eye, Calendar, Clock, MapPin } from 'lucide-react'
+import { MoreHorizontal, Search, Edit, Trash2, Eye, Calendar, Clock, MapPin, FileText } from 'lucide-react'
 import { Schedule } from '../page'
 import { toast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 // Mock data for design purposes
 const mockSchedules: Schedule[] = [
@@ -161,6 +162,7 @@ interface ScheduleListProps {
 }
 
 export function ScheduleList({ onEdit }: ScheduleListProps) {
+  const router = useRouter()
   const [searchTerm, setSearchTerm] = useState('')
   const [schedules] = useState<Schedule[]>(mockSchedules)
 
@@ -260,13 +262,14 @@ export function ScheduleList({ onEdit }: ScheduleListProps) {
               <TableHead>Client</TableHead>
               <TableHead>Attendees</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="w-[120px]">Meeting Points</TableHead>
               <TableHead className="w-[70px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredSchedules.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="h-24 text-center">
+                <TableCell colSpan={8} className="h-24 text-center">
                   {searchTerm ? 'No schedules found matching your search.' : 'No schedules found.'}
                 </TableCell>
               </TableRow>
@@ -334,6 +337,17 @@ export function ScheduleList({ onEdit }: ScheduleListProps) {
                   </TableCell>
                   <TableCell>
                     {getStatusBadge(schedule.status)}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => router.push('/schedule/meeting-points')}
+                      className="flex items-center space-x-1"
+                    >
+                      <FileText className="h-3 w-3" />
+                      <span>Points</span>
+                    </Button>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
