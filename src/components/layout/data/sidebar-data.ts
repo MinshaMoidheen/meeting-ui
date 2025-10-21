@@ -69,6 +69,25 @@ const allSidebarItems: SidebarItem[] = [
     allowedRoles: ['admin', 'superadmin'], // Admin and superadmin can see schedule
   },
   {
+    title: 'Incoming Meetings',
+    url: '/schedule/incoming',
+    icon: IconCalendarEvent,
+    allowedRoles: ['admin', 'superadmin'],
+  },
+  {
+    title: 'Ongoing Meetings',
+    url: '/schedule/ongoing',
+    icon: IconCalendarEvent,
+    allowedRoles: ['admin', 'superadmin'],
+  },
+  {
+    title: 'Previous Meetings',
+    url: '/schedule/previous',
+    icon: IconCalendarEvent,
+    allowedRoles: ['admin', 'superadmin'],
+  },
+  
+  {
     title: 'Settings',
     url: '/settings',
     icon: IconSettings,
