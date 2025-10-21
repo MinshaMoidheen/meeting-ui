@@ -97,3 +97,4 @@ export const {
   useUpdateAdminMutation,
   useDeleteAdminMutation,
 } = adminApi
+

@@ -112,3 +112,4 @@ const { user, isAuthenticated, login, logout } = useAuth()
 - **User**: Standard user access
 
 The system automatically handles user type detection and appropriate access control.
+

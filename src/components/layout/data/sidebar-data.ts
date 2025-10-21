@@ -45,13 +45,13 @@ const allSidebarItems: SidebarItem[] = [
     allowedRoles: ['superadmin'], // Only superadmin can see admin management
   },
   {
-    title: 'User Management',
+    title: 'Users',
     url: '/user-management',
     icon: IconUserPlus,
     allowedRoles: ['admin', 'superadmin'], // Admin and superadmin can see user management
   },
   {
-    title: 'Client Management',
+    title: 'Clients',
     url: '/client-management',
     icon: IconUsersGroup,
     allowedRoles: ['admin', 'superadmin'], // Admin and superadmin can see client management

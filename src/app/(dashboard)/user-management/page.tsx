@@ -64,30 +64,31 @@ export default function UserManagementPage() {
 
       <Main fixed>
         <HeaderContainer>
-          <>
-            <h1 className="text-2xl font-bold tracking-tight">User Management</h1>
-            <div className="flex items-center space-x-2">
-              <Button onClick={() => setActiveTab('create')}>
-                Add New User
-              </Button>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex items-center justify-between w-full">
+              <TabsList>
+                <TabsTrigger value="list">User List</TabsTrigger>
+                <TabsTrigger value="create">Create User</TabsTrigger>
+                {editingUser && <TabsTrigger value="edit">Edit User</TabsTrigger>}
+              </TabsList>
+              <div className="flex items-center space-x-2">
+                <Button onClick={() => setActiveTab('create')}>
+                  Add New User
+                </Button>
+              </div>
             </div>
-          </>
+          </Tabs>
         </HeaderContainer>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="list">User List</TabsTrigger>
-            <TabsTrigger value="create">Create User</TabsTrigger>
-            {editingUser && <TabsTrigger value="edit">Edit User</TabsTrigger>}
-          </TabsList>
 
           <TabsContent value="list" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>All Users</CardTitle>
+                {/* <CardTitle>All Users</CardTitle>
                 <CardDescription>
                   Manage user accounts and their attendance settings
-                </CardDescription>
+                </CardDescription> */}
               </CardHeader>
               <CardContent>
                 <UserList onEdit={handleEdit} onRefetch={refetchUsers} />
@@ -98,10 +99,10 @@ export default function UserManagementPage() {
           <TabsContent value="create" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Create New User</CardTitle>
+                {/* <CardTitle>Create New User</CardTitle>
                 <CardDescription>
                   Add a new user account to the system
-                </CardDescription>
+                </CardDescription> */}
               </CardHeader>
               <CardContent>
                 <UserForm 
@@ -117,10 +118,10 @@ export default function UserManagementPage() {
             <TabsContent value="edit" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Edit User</CardTitle>
+                  {/* <CardTitle>Edit User</CardTitle>
                   <CardDescription>
                     Update user account information
-                  </CardDescription>
+                  </CardDescription> */}
                 </CardHeader>
                 <CardContent>
                   <UserForm 

@@ -394,3 +394,4 @@ export function ScheduleList({ onEdit }: ScheduleListProps) {
     </div>
   )
 }
+
