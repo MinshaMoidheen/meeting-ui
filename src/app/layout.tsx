@@ -6,7 +6,7 @@ import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'MeetWise',
+  title: 'Samay',
   description: 'A comprehensive meeting management system for scheduling, tracking, and managing meetings with attendees and meeting points.',
   manifest: '/manifest.json',
   themeColor: '#000000',

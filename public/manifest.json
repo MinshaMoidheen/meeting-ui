@@ -1,6 +1,6 @@
 {
-  "name": "MeetWise",
-  "short_name": "MeetingApp",
+  "name": "Samay",
+  "short_name": "Samay",
   "description": "A comprehensive meeting management system for scheduling, tracking, and managing meetings with attendees and meeting points.",
   "start_url": "/",
   "display": "standalone",

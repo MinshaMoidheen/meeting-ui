@@ -127,7 +127,7 @@ export const getSidebarData = (userRole?: UserRole): SidebarData => {
     },
     teams: [
       {
-        name: 'MeetWise',
+        name: 'Samay',
         logo: Command,
         plan: 'Meeting Management',
       },
