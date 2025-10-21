@@ -64,31 +64,28 @@ export default function AdminManagementPage() {
 
       <Main fixed>
         <HeaderContainer>
-          <>
-            <h1 className="text-2xl font-bold tracking-tight">Admin Management</h1>
-            <div className="flex items-center space-x-2">
-              <Button onClick={() => setActiveTab('create')}>
-                Add New Admin
-              </Button>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex items-center justify-between w-full">
+              <TabsList>
+                <TabsTrigger value="list">Admin List</TabsTrigger>
+                <TabsTrigger value="create">Create Admin</TabsTrigger>
+                {editingAdmin && <TabsTrigger value="edit">Edit Admin</TabsTrigger>}
+              </TabsList>
+              <div className="flex items-center space-x-2">
+                <Button onClick={() => setActiveTab('create')}>
+                  Add New Admin
+                </Button>
+              </div>
             </div>
-          </>
+          </Tabs>
         </HeaderContainer>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="list">Admin List</TabsTrigger>
-            <TabsTrigger value="create">Create Admin</TabsTrigger>
-            {editingAdmin && <TabsTrigger value="edit">Edit Admin</TabsTrigger>}
-          </TabsList>
 
           <TabsContent value="list" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>All Admins</CardTitle>
-                <CardDescription>
-                  Manage admin accounts and their permissions
-                </CardDescription>
-              </CardHeader>
+             
+                <br/>
               <CardContent>
                 <AdminList onEdit={handleEdit} onRefetch={refetchAdmins} />
               </CardContent>
@@ -97,12 +94,7 @@ export default function AdminManagementPage() {
 
           <TabsContent value="create" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Create New Admin</CardTitle>
-                <CardDescription>
-                  Add a new admin account to the system
-                </CardDescription>
-              </CardHeader>
+              <br/>
               <CardContent>
                 <AdminForm 
                   mode="create" 
@@ -116,12 +108,7 @@ export default function AdminManagementPage() {
           {editingAdmin && (
             <TabsContent value="edit" className="space-y-4">
               <Card>
-                <CardHeader>
-                  <CardTitle>Edit Admin</CardTitle>
-                  <CardDescription>
-                    Update admin account information
-                  </CardDescription>
-                </CardHeader>
+                 <br/>
                 <CardContent>
                   <AdminForm 
                     mode="edit" 

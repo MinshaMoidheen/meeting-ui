@@ -66,31 +66,27 @@ export default function ClientManagementPage() {
 
       <Main fixed>
         <HeaderContainer>
-          <>
-            <h1 className="text-2xl font-bold tracking-tight">Client Management</h1>
-            <div className="flex items-center space-x-2">
-              <Button onClick={() => setActiveTab('create')}>
-                Add New Client
-              </Button>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex items-center justify-between w-full">
+              <TabsList>
+                <TabsTrigger value="list">Client List</TabsTrigger>
+                <TabsTrigger value="create">Create Client</TabsTrigger>
+                {editingClient && <TabsTrigger value="edit">Edit Client</TabsTrigger>}
+              </TabsList>
+              <div className="flex items-center space-x-2">
+                <Button onClick={() => setActiveTab('create')}>
+                  Add New Client
+                </Button>
+              </div>
             </div>
-          </>
+          </Tabs>
         </HeaderContainer>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="list">Client List</TabsTrigger>
-            <TabsTrigger value="create">Create Client</TabsTrigger>
-            {editingClient && <TabsTrigger value="edit">Edit Client</TabsTrigger>}
-          </TabsList>
 
           <TabsContent value="list" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>All Clients</CardTitle>
-                <CardDescription>
-                  Manage client accounts and their contact information
-                </CardDescription>
-              </CardHeader>
+              <br/>
               <CardContent>
                 <ClientList onEdit={handleEdit} />
               </CardContent>
@@ -99,12 +95,7 @@ export default function ClientManagementPage() {
 
           <TabsContent value="create" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Create New Client</CardTitle>
-                <CardDescription>
-                  Add a new client account to the system
-                </CardDescription>
-              </CardHeader>
+               <br/>
               <CardContent>
                 <ClientForm 
                   mode="create" 
@@ -118,12 +109,7 @@ export default function ClientManagementPage() {
           {editingClient && (
             <TabsContent value="edit" className="space-y-4">
               <Card>
-                <CardHeader>
-                  <CardTitle>Edit Client</CardTitle>
-                  <CardDescription>
-                    Update client account information
-                  </CardDescription>
-                </CardHeader>
+ <br/>
                 <CardContent>
                   <ClientForm 
                     mode="edit" 

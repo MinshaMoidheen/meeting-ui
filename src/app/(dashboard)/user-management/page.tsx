@@ -84,12 +84,7 @@ export default function UserManagementPage() {
 
           <TabsContent value="list" className="space-y-4">
             <Card>
-              <CardHeader>
-                {/* <CardTitle>All Users</CardTitle>
-                <CardDescription>
-                  Manage user accounts and their attendance settings
-                </CardDescription> */}
-              </CardHeader>
+              <br/>
               <CardContent>
                 <UserList onEdit={handleEdit} onRefetch={refetchUsers} />
               </CardContent>
@@ -98,12 +93,7 @@ export default function UserManagementPage() {
 
           <TabsContent value="create" className="space-y-4">
             <Card>
-              <CardHeader>
-                {/* <CardTitle>Create New User</CardTitle>
-                <CardDescription>
-                  Add a new user account to the system
-                </CardDescription> */}
-              </CardHeader>
+               <br/>
               <CardContent>
                 <UserForm 
                   mode="create" 
@@ -117,12 +107,7 @@ export default function UserManagementPage() {
           {editingUser && (
             <TabsContent value="edit" className="space-y-4">
               <Card>
-                <CardHeader>
-                  {/* <CardTitle>Edit User</CardTitle>
-                  <CardDescription>
-                    Update user account information
-                  </CardDescription> */}
-                </CardHeader>
+                <br/>
                 <CardContent>
                   <UserForm 
                     mode="edit" 

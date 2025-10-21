@@ -66,7 +66,17 @@ const scheduleFormSchema = z.object({
     .min(1, 'Client is required'),
   attendeeIds: z
     .array(z.string())
-    .min(1, 'At least one attendee is required'),
+    .optional()
+    .default([]),
+  otherAttendees: z
+    .string()
+    .optional(),
+  organizer: z
+    .string()
+    .trim()
+    .min(1, 'Organizer is required')
+    .min(2, 'Organizer name must be at least 2 characters long')
+    .max(100, 'Organizer name must be less than 100 characters'),
   status: z
     .enum(['scheduled', 'in-progress', 'completed', 'cancelled'])
     .default('scheduled'),
@@ -85,6 +95,9 @@ export function ScheduleForm({ mode, schedule, onSuccess, onCancel }: ScheduleFo
   const { data: clientsData } = useGetClientsQuery({ limit: 100, offset: 0 })
   const { data: attendeesData } = useGetClientAttendeesQuery({ limit: 100, offset: 0 })
 
+  // Get all attendee IDs for default selection
+  const allAttendeeIds = attendeesData?.attendees?.map(attendee => attendee._id) || []
+
   const form = useForm<ScheduleFormData>({
     resolver: zodResolver(scheduleFormSchema),
     defaultValues: {
@@ -96,10 +109,19 @@ export function ScheduleForm({ mode, schedule, onSuccess, onCancel }: ScheduleFo
       endTime: '10:00',
       location: '',
       clientId: '',
-      attendeeIds: [],
+      attendeeIds: allAttendeeIds, // All attendees selected by default
+      otherAttendees: '',
+      organizer: '',
       status: 'scheduled',
     },
   })
+
+  // Update form when attendees data loads (for create mode)
+  useEffect(() => {
+    if (mode === 'create' && attendeesData?.attendees && allAttendeeIds.length > 0) {
+      form.setValue('attendeeIds', allAttendeeIds)
+    }
+  }, [attendeesData, mode, allAttendeeIds, form])
 
   // Populate form with schedule data when editing
   useEffect(() => {
@@ -113,7 +135,9 @@ export function ScheduleForm({ mode, schedule, onSuccess, onCancel }: ScheduleFo
         endTime: schedule.endTime,
         location: schedule.location,
         clientId: schedule.clientId,
-        attendeeIds: schedule.attendeeIds,
+        attendeeIds: schedule.attendeeIds || [],
+        otherAttendees: schedule.otherAttendees || '',
+        organizer: schedule.organizer || '',
         status: schedule.status,
       })
     }
@@ -143,6 +167,19 @@ export function ScheduleForm({ mode, schedule, onSuccess, onCancel }: ScheduleFo
   }
 
   const isLoading = form.formState.isSubmitting
+
+  // Helper functions for select all/deselect all
+  const handleSelectAll = () => {
+    form.setValue('attendeeIds', allAttendeeIds)
+  }
+
+  const handleDeselectAll = () => {
+    form.setValue('attendeeIds', [])
+  }
+
+  const selectedAttendees = form.watch('attendeeIds') || []
+  const isAllSelected = selectedAttendees.length === allAttendeeIds.length
+  const isNoneSelected = selectedAttendees.length === 0
 
   return (
     <Form {...form}>
@@ -187,81 +224,84 @@ export function ScheduleForm({ mode, schedule, onSuccess, onCancel }: ScheduleFo
             )}
           />
 
-          {/* Start Date */}
-          <FormField
-            control={form.control}
-            name="startDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Start Date</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="date"
-                    {...field} 
-                    disabled={isLoading}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Date and Time Row */}
+          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Start Date */}
+            <FormField
+              control={form.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start Date</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="date"
+                      {...field} 
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* End Date */}
-          <FormField
-            control={form.control}
-            name="endDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>End Date</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="date"
-                    {...field} 
-                    disabled={isLoading}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* End Date */}
+            <FormField
+              control={form.control}
+              name="endDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Date</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="date"
+                      {...field} 
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Start Time */}
-          <FormField
-            control={form.control}
-            name="startTime"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Start Time</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="time"
-                    {...field} 
-                    disabled={isLoading}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* Start Time */}
+            <FormField
+              control={form.control}
+              name="startTime"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start Time</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="time"
+                      {...field} 
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* End Time */}
-          <FormField
-            control={form.control}
-            name="endTime"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>End Time</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="time"
-                    {...field} 
-                    disabled={isLoading}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* End Time */}
+            <FormField
+              control={form.control}
+              name="endTime"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Time</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="time"
+                      {...field} 
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           {/* Location */}
           <FormField
@@ -339,7 +379,29 @@ export function ScheduleForm({ mode, schedule, onSuccess, onCancel }: ScheduleFo
             name="attendeeIds"
             render={() => (
               <FormItem className="md:col-span-2">
-                <FormLabel>Attendees</FormLabel>
+                <div className="flex items-center justify-between mb-2">
+                  <FormLabel>Attendees</FormLabel>
+                  <div className="flex space-x-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleSelectAll}
+                      disabled={isLoading || isAllSelected}
+                    >
+                      Select All
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleDeselectAll}
+                      disabled={isLoading || isNoneSelected}
+                    >
+                      Deselect All
+                    </Button>
+                  </div>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-48 overflow-y-auto border rounded-md p-4">
                   {attendeesData?.attendees?.map((attendee) => (
                     <FormField
@@ -381,6 +443,48 @@ export function ScheduleForm({ mode, schedule, onSuccess, onCancel }: ScheduleFo
                     />
                   ))}
                 </div>
+                <div className="text-sm text-muted-foreground mt-2">
+                  {selectedAttendees.length} of {allAttendeeIds.length} attendees selected
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Other Attendees */}
+          <FormField
+            control={form.control}
+            name="otherAttendees"
+            render={({ field }) => (
+              <FormItem className="md:col-span-2">
+                <FormLabel>Other Attendees</FormLabel>
+                <FormControl>
+                  <Textarea 
+                    placeholder="Enter names and emails of additional attendees not in the system (one per line)..."
+                    className="min-h-[80px]"
+                    {...field} 
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Organizer */}
+          <FormField
+            control={form.control}
+            name="organizer"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Organizer</FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="Meeting organizer name" 
+                    {...field} 
+                    disabled={isLoading}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -396,7 +500,9 @@ export function ScheduleForm({ mode, schedule, onSuccess, onCancel }: ScheduleFo
             <li>• Date & Time: Select appropriate start and end times</li>
             <li>• Location: Specify where the meeting will take place</li>
             <li>• Client: Select which client this schedule belongs to</li>
-            <li>• Attendees: Choose one or more attendees for the meeting</li>
+            <li>• Attendees: All attendees are selected by default, uncheck to remove</li>
+            <li>• Other Attendees: Add external attendees not in the system</li>
+            <li>• Organizer: Name of the person organizing the meeting</li>
           </ul>
         </div>
 

@@ -72,31 +72,27 @@ export default function ClientAttendeesPage() {
 
       <Main fixed>
         <HeaderContainer>
-          <>
-            <h1 className="text-2xl font-bold tracking-tight">Client Attendees</h1>
-            <div className="flex items-center space-x-2">
-              <Button onClick={() => setActiveTab('create')}>
-                Add New Attendee
-              </Button>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex items-center justify-between w-full">
+              <TabsList>
+                <TabsTrigger value="list">Attendees List</TabsTrigger>
+                <TabsTrigger value="create">Create Attendee</TabsTrigger>
+                {editingAttendee && <TabsTrigger value="edit">Edit Attendee</TabsTrigger>}
+              </TabsList>
+              <div className="flex items-center space-x-2">
+                <Button onClick={() => setActiveTab('create')}>
+                  Add New Attendee
+                </Button>
+              </div>
             </div>
-          </>
+          </Tabs>
         </HeaderContainer>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="list">Attendees List</TabsTrigger>
-            <TabsTrigger value="create">Create Attendee</TabsTrigger>
-            {editingAttendee && <TabsTrigger value="edit">Edit Attendee</TabsTrigger>}
-          </TabsList>
 
           <TabsContent value="list" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>All Client Attendees</CardTitle>
-                <CardDescription>
-                  Manage client attendees and their contact information
-                </CardDescription>
-              </CardHeader>
+               <br/>
               <CardContent>
                 <ClientAttendeesList onEdit={handleEdit} />
               </CardContent>
@@ -105,12 +101,7 @@ export default function ClientAttendeesPage() {
 
           <TabsContent value="create" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Create New Attendee</CardTitle>
-                <CardDescription>
-                  Add a new client attendee to the system
-                </CardDescription>
-              </CardHeader>
+              <br/>
               <CardContent>
                 <ClientAttendeesForm 
                   mode="create" 
@@ -124,12 +115,7 @@ export default function ClientAttendeesPage() {
           {editingAttendee && (
             <TabsContent value="edit" className="space-y-4">
               <Card>
-                <CardHeader>
-                  <CardTitle>Edit Attendee</CardTitle>
-                  <CardDescription>
-                    Update attendee account information
-                  </CardDescription>
-                </CardHeader>
+                <br/>
                 <CardContent>
                   <ClientAttendeesForm 
                     mode="edit" 

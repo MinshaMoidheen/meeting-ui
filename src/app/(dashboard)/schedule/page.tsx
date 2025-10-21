@@ -37,6 +37,8 @@ export interface Schedule {
     username: string
     email: string
   }>
+  otherAttendees?: string
+  organizer: string
   status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled'
   createdAt: string
   updatedAt: string
@@ -83,31 +85,27 @@ export default function SchedulePage() {
 
       <Main fixed>
         <HeaderContainer>
-          <>
-            <h1 className="text-2xl font-bold tracking-tight">Schedule Management</h1>
-            <div className="flex items-center space-x-2">
-              <Button onClick={() => setActiveTab('create')}>
-                Add New Schedule
-              </Button>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex items-center justify-between w-full">
+              <TabsList>
+                <TabsTrigger value="list">Schedule List</TabsTrigger>
+                <TabsTrigger value="create">Create Schedule</TabsTrigger>
+                {editingSchedule && <TabsTrigger value="edit">Edit Schedule</TabsTrigger>}
+              </TabsList>
+              <div className="flex items-center space-x-2">
+                <Button onClick={() => setActiveTab('create')}>
+                  Add New Schedule
+                </Button>
+              </div>
             </div>
-          </>
+          </Tabs>
         </HeaderContainer>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="list">Schedule List</TabsTrigger>
-            <TabsTrigger value="create">Create Schedule</TabsTrigger>
-            {editingSchedule && <TabsTrigger value="edit">Edit Schedule</TabsTrigger>}
-          </TabsList>
 
           <TabsContent value="list" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>All Schedules</CardTitle>
-                <CardDescription>
-                  Manage scheduled events, meetings, and appointments
-                </CardDescription>
-              </CardHeader>
+              <br/>
               <CardContent>
                 <ScheduleList onEdit={handleEdit} />
               </CardContent>
@@ -116,12 +114,7 @@ export default function SchedulePage() {
 
           <TabsContent value="create" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Create New Schedule</CardTitle>
-                <CardDescription>
-                  Add a new scheduled event to the system
-                </CardDescription>
-              </CardHeader>
+               <br/>
               <CardContent>
                 <ScheduleForm 
                   mode="create" 
@@ -135,12 +128,7 @@ export default function SchedulePage() {
           {editingSchedule && (
             <TabsContent value="edit" className="space-y-4">
               <Card>
-                <CardHeader>
-                  <CardTitle>Edit Schedule</CardTitle>
-                  <CardDescription>
-                    Update schedule information
-                  </CardDescription>
-                </CardHeader>
+                <br/>
                 <CardContent>
                   <ScheduleForm 
                     mode="edit" 
