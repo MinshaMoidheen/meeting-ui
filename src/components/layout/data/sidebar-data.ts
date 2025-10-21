@@ -17,8 +17,9 @@ import {
   IconUsersGroup,
   IconCalendarEvent,
   IconCalendar,
+  IconUpload,
 } from '@tabler/icons-react'
-import { AudioWaveform, Command, GalleryVerticalEnd, BookOpen, CalendarDays, Clock, History, Play } from 'lucide-react'
+import { AudioWaveform, Command, GalleryVerticalEnd, BookOpen, CalendarDays, Clock, History, Play, Upload } from 'lucide-react'
 import { type SidebarData } from '../types'
 
 export type UserRole = 'user' | 'admin' | 'superadmin'
@@ -86,8 +87,12 @@ const allSidebarItems: SidebarItem[] = [
     icon: History,
     allowedRoles: ['admin', 'superadmin'],
   },
- 
-  
+  {
+    title: 'Import Data',
+    url: '/import',
+    icon: Upload,
+    allowedRoles: ['admin', 'superadmin'],
+  },
   {
     title: 'Settings',
     url: '/settings',
@@ -116,9 +121,9 @@ export const getSidebarData = (userRole?: UserRole): SidebarData => {
     },
     teams: [
       {
-        name: 'Next Shadcn Admin',
+        name: 'MeetWise',
         logo: Command,
-        plan: 'Next.js + ShadcnUI',
+        plan: 'Meeting Management',
       },
       {
         name: 'Acme Inc',

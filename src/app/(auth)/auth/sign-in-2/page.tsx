@@ -10,7 +10,7 @@ export default function SignIn2() {
         <div className='absolute inset-0 bg-zinc-900' />
         <div className='absolute inset-0 flex flex-col'>
           <header className='relative z-20 p-10'>
-            <div className='flex items-center text-lg font-medium text-white'>
+            {/* <div className='flex items-center text-lg font-medium text-white'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 24 24'
@@ -24,7 +24,7 @@ export default function SignIn2() {
                 <path d='M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3' />
               </svg>
               Next Shadcn Admin
-            </div>
+            </div> */}
           </header>
 
           <div className='relative z-20 flex flex-1 items-center justify-center p-10'>
