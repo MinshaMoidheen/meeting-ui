@@ -85,7 +85,7 @@ export default function AdminManagementPage() {
           <TabsContent value="list" className="space-y-4">
             <Card>
              
-                <br/>
+             
               <CardContent>
                 <AdminList onEdit={handleEdit} onRefetch={refetchAdmins} />
               </CardContent>
@@ -94,7 +94,7 @@ export default function AdminManagementPage() {
 
           <TabsContent value="create" className="space-y-4">
             <Card>
-              <br/>
+             
               <CardContent>
                 <AdminForm 
                   mode="create" 
@@ -108,7 +108,7 @@ export default function AdminManagementPage() {
           {editingAdmin && (
             <TabsContent value="edit" className="space-y-4">
               <Card>
-                 <br/>
+               
                 <CardContent>
                   <AdminForm 
                     mode="edit" 

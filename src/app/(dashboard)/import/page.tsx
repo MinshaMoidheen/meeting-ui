@@ -28,7 +28,6 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { Main } from '@/components/ui/main'
-import { HeaderContainer } from '@/components/ui/header-container'
 import { RoleProtectedRoute } from '@/components/role-protected-route'
 import { CSVProcessor } from '@/utils/csvProcessor'
 
@@ -203,60 +202,65 @@ export default function ImportPage() {
       </Header>
 
       <Main fixed>
-        <HeaderContainer>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex items-center justify-between w-full">
-              <TabsList>
-                <TabsTrigger value="attendees" className="flex items-center space-x-2">
+        <div className="p-4 md:p-6 w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4 mb-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="sm:w-auto">
+              <TabsList className="grid w-full sm:w-auto grid-cols-2">
+                <TabsTrigger value="attendees" className="flex items-center space-x-2 text-xs sm:text-sm">
                   <Users className="h-4 w-4" />
-                  <span>Import Attendees</span>
+                  <span className="hidden sm:inline">Import Attendees</span>
+                  <span className="sm:hidden">Attendees</span>
                 </TabsTrigger>
-                <TabsTrigger value="meetings" className="flex items-center space-x-2">
+                <TabsTrigger value="meetings" className="flex items-center space-x-2 text-xs sm:text-sm">
                   <Calendar className="h-4 w-4" />
-                  <span>Import Meetings</span>
+                  <span className="hidden sm:inline">Import Meetings</span>
+                  <span className="sm:hidden">Meetings</span>
                 </TabsTrigger>
               </TabsList>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => downloadTemplate('attendees')}
-                  className="flex items-center space-x-2"
-                >
-                  <Download className="h-4 w-4" />
-                  <span>Attendees Template</span>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => downloadTemplate('meetings')}
-                  className="flex items-center space-x-2"
-                >
-                  <Download className="h-4 w-4" />
-                  <span>Meetings Template</span>
-                </Button>
-              </div>
+            </Tabs>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadTemplate('attendees')}
+                className="flex items-center space-x-2 w-full sm:w-auto text-xs"
+              >
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline">Attendees Template</span>
+                <span className="sm:hidden">Attendees</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadTemplate('meetings')}
+                className="flex items-center space-x-2 w-full sm:w-auto text-xs"
+              >
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline">Meetings Template</span>
+                <span className="sm:hidden">Meetings</span>
+              </Button>
             </div>
+          </div>
 
-            {/* Instructions */}
-            <div className="mt-4">
-              <Alert>
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  Import attendees and meetings data using CSV files. Download the templates above to ensure proper formatting.
-                </AlertDescription>
-              </Alert>
-            </div>
+          {/* Instructions */}
+          <div className="mb-6">
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Import attendees and meetings data using CSV files. Download the templates above to ensure proper formatting.
+              </AlertDescription>
+            </Alert>
+          </div>
+
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 
             {/* Attendees Import */}
             <TabsContent value="attendees" className="space-y-4">
               <Card>
                 <br/>
-                <CardContent>
-                    <div className="space-y-6">
-                     
-
-                      {/* File Upload */}
+                <CardContent className="p-4 md:p-6">
+                  <div className="space-y-6">
+                    {/* File Upload */}
                     <FileUpload
                       onFileSelect={handleAttendeesFileChange}
                       accept={{ "text/csv": [".csv"] }}
@@ -292,7 +296,7 @@ export default function ImportPage() {
                     {importResults?.attendees && (
                       <div className="space-y-2">
                         <Label>Import Results</Label>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div className="text-center p-3 bg-green-50 rounded-lg">
                             <div className="flex items-center justify-center space-x-1 text-green-600">
                               <CheckCircle className="h-4 w-4" />
@@ -317,20 +321,18 @@ export default function ImportPage() {
                         </div>
                       </div>
                     )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             {/* Meetings Import */}
             <TabsContent value="meetings" className="space-y-4">
               <Card>
                 <br/>
-                <CardContent>
-                    <div className="space-y-6">
-                     
-
-                      {/* File Upload */}
+                <CardContent className="p-4 md:p-6">
+                  <div className="space-y-6">
+                    {/* File Upload */}
                     <FileUpload
                       onFileSelect={handleMeetingsFileChange}
                       accept={{ "text/csv": [".csv"] }}
@@ -366,7 +368,7 @@ export default function ImportPage() {
                     {importResults?.meetings && (
                       <div className="space-y-2">
                         <Label>Import Results</Label>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div className="text-center p-3 bg-green-50 rounded-lg">
                             <div className="flex items-center justify-center space-x-1 text-green-600">
                               <CheckCircle className="h-4 w-4" />
@@ -391,12 +393,12 @@ export default function ImportPage() {
                         </div>
                       </div>
                     )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-        </HeaderContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
       </Main>
     </RoleProtectedRoute>
   )

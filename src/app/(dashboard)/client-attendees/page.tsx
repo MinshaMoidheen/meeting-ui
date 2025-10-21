@@ -10,7 +10,6 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { Main } from '@/components/ui/main'
-import { HeaderContainer } from '@/components/ui/header-container'
 import { ClientAttendeesList } from './components/client-attendees-list'
 import { ClientAttendeesForm } from './components/client-attendees-form'
 import { RoleProtectedRoute } from '@/components/role-protected-route'
@@ -71,52 +70,55 @@ export default function ClientAttendeesPage() {
       </Header>
 
       <Main fixed>
-        <HeaderContainer>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex items-center justify-between w-full">
-              <TabsList>
-                <TabsTrigger value="list">Attendees List</TabsTrigger>
-                <TabsTrigger value="create">Create Attendee</TabsTrigger>
-                {editingAttendee && <TabsTrigger value="edit">Edit Attendee</TabsTrigger>}
+        <div className="p-4 md:p-6 w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4 mb-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="sm:w-auto">
+              <TabsList className="grid w-full sm:w-auto grid-cols-2 sm:grid-cols-3">
+                <TabsTrigger value="list" className="text-xs sm:text-sm">Attendees List</TabsTrigger>
+                <TabsTrigger value="create" className="text-xs sm:text-sm">Create Attendee</TabsTrigger>
+                {editingAttendee && <TabsTrigger value="edit" className="text-xs sm:text-sm">Edit Attendee</TabsTrigger>}
               </TabsList>
+            </Tabs>
+            {activeTab === 'list' && (
               <div className="flex items-center space-x-2">
-                <Button onClick={() => setActiveTab('create')}>
+                <Button 
+                  onClick={() => setActiveTab('create')}
+                  className="w-full sm:w-auto text-xs sm:text-sm"
+                  size="sm"
+                >
                   Add New Attendee
                 </Button>
               </div>
-            </div>
-          </Tabs>
-        </HeaderContainer>
+            )}
+          </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-
-          <TabsContent value="list" className="space-y-4">
-            <Card>
-               <br/>
-              <CardContent>
-                <ClientAttendeesList onEdit={handleEdit} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="create" className="space-y-4">
-            <Card>
-              <br/>
-              <CardContent>
-                <ClientAttendeesForm 
-                  mode="create" 
-                  onSuccess={handleSuccess}
-                  onCancel={handleCancel}
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {editingAttendee && (
-            <TabsContent value="edit" className="space-y-4">
+          <div className="space-y-4">
+            {activeTab === 'list' && (
               <Card>
-                <br/>
-                <CardContent>
+                 
+                <CardContent className="p-4 md:p-6">
+                  <ClientAttendeesList onEdit={handleEdit} />
+                </CardContent>
+              </Card>
+            )}
+
+            {activeTab === 'create' && (
+              <Card>
+                {/* <br/> */}
+                <CardContent className="p-4 md:p-6">
+                  <ClientAttendeesForm 
+                    mode="create" 
+                    onSuccess={handleSuccess}
+                    onCancel={handleCancel}
+                  />
+                </CardContent>
+              </Card>
+            )}
+
+            {activeTab === 'edit' && editingAttendee && (
+              <Card>
+                {/* <br/> */}
+                <CardContent className="p-4 md:p-6">
                   <ClientAttendeesForm 
                     mode="edit" 
                     attendee={editingAttendee}
@@ -125,9 +127,9 @@ export default function ClientAttendeesPage() {
                   />
                 </CardContent>
               </Card>
-            </TabsContent>
-          )}
-        </Tabs>
+            )}
+          </div>
+        </div>
       </Main>
     </RoleProtectedRoute>
   )

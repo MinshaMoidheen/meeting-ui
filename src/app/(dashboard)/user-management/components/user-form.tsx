@@ -212,8 +212,8 @@ export function UserForm({ mode, user, onSuccess, onCancel }: UserFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Email */}
           <FormField
             control={form.control}
@@ -297,11 +297,20 @@ export function UserForm({ mode, user, onSuccess, onCancel }: UserFormProps) {
       
 
         {/* Actions */}
-        <div className="flex justify-end space-x-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
+        <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={onCancel}
+            className="w-full sm:w-auto"
+          >
             Cancel
           </Button>
-          <Button type="submit" disabled={isLoading}>
+          <Button 
+            type="submit" 
+            disabled={isLoading}
+            className="w-full sm:w-auto"
+          >
             {isLoading 
               ? (mode === 'create' ? 'Creating...' : 'Updating...') 
               : (mode === 'create' ? 'Create User' : 'Update User')

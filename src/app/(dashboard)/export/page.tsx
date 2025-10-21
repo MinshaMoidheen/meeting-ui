@@ -144,12 +144,11 @@ Planning Session,Quarterly planning,${startDate},${endDate},10:00,12:00,Board Ro
       </Header>
 
       <Main fixed>
-        <div className="p-6 w-full">
-         
+        <div className="p-4 md:p-6 w-full">
           {/* Export Form */}
           <Card>
             <br/>
-            <CardContent>
+            <CardContent className="p-4 md:p-6">
               <div className="space-y-6">
                 {/* Date Range Selection */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -178,12 +177,13 @@ Planning Session,Quarterly planning,${startDate},${endDate},10:00,12:00,Board Ro
                 {/* Export Format */}
                 <div className="space-y-2">
                   <Label>Export Format</Label>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                     <Button
                       variant={exportFormat === 'csv' ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setExportFormat('csv')}
                       disabled={isExporting}
+                      className="w-full sm:w-auto"
                     >
                       CSV
                     </Button>
@@ -192,6 +192,7 @@ Planning Session,Quarterly planning,${startDate},${endDate},10:00,12:00,Board Ro
                       size="sm"
                       onClick={() => setExportFormat('excel')}
                       disabled={isExporting}
+                      className="w-full sm:w-auto"
                     >
                       Excel
                     </Button>
@@ -200,6 +201,7 @@ Planning Session,Quarterly planning,${startDate},${endDate},10:00,12:00,Board Ro
                       size="sm"
                       onClick={() => setExportFormat('pdf')}
                       disabled={isExporting}
+                      className="w-full sm:w-auto"
                     >
                       PDF
                     </Button>

@@ -10,7 +10,6 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { Main } from '@/components/ui/main'
-import { HeaderContainer } from '@/components/ui/header-container'
 import { ClientList } from './components/client-list'
 import { ClientForm } from './components/client-form'
 import { RoleProtectedRoute } from '@/components/role-protected-route'
@@ -65,52 +64,55 @@ export default function ClientManagementPage() {
       </Header>
 
       <Main fixed>
-        <HeaderContainer>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex items-center justify-between w-full">
-              <TabsList>
-                <TabsTrigger value="list">Client List</TabsTrigger>
-                <TabsTrigger value="create">Create Client</TabsTrigger>
-                {editingClient && <TabsTrigger value="edit">Edit Client</TabsTrigger>}
+        <div className="p-4 md:p-6 w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4 mb-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="sm:w-auto">
+              <TabsList className="grid w-full sm:w-auto grid-cols-2 sm:grid-cols-3">
+                <TabsTrigger value="list" className="text-xs sm:text-sm">Client List</TabsTrigger>
+                <TabsTrigger value="create" className="text-xs sm:text-sm">Create Client</TabsTrigger>
+                {editingClient && <TabsTrigger value="edit" className="text-xs sm:text-sm">Edit Client</TabsTrigger>}
               </TabsList>
+            </Tabs>
+            {activeTab === 'list' && (
               <div className="flex items-center space-x-2">
-                <Button onClick={() => setActiveTab('create')}>
+                <Button 
+                  onClick={() => setActiveTab('create')}
+                  className="w-full sm:w-auto text-xs sm:text-sm"
+                  size="sm"
+                >
                   Add New Client
                 </Button>
               </div>
-            </div>
-          </Tabs>
-        </HeaderContainer>
+            )}
+          </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-
-          <TabsContent value="list" className="space-y-4">
-            <Card>
-              <br/>
-              <CardContent>
-                <ClientList onEdit={handleEdit} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="create" className="space-y-4">
-            <Card>
-               <br/>
-              <CardContent>
-                <ClientForm 
-                  mode="create" 
-                  onSuccess={handleSuccess}
-                  onCancel={handleCancel}
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {editingClient && (
-            <TabsContent value="edit" className="space-y-4">
+          <div className="space-y-4">
+            {activeTab === 'list' && (
               <Card>
- <br/>
-                <CardContent>
+                {/* <br/> */}
+                <CardContent className="p-4 md:p-6">
+                  <ClientList onEdit={handleEdit} />
+                </CardContent>
+              </Card>
+            )}
+
+            {activeTab === 'create' && (
+              <Card>
+                 {/* <br/> */}
+                <CardContent className="p-4 md:p-6">
+                  <ClientForm 
+                    mode="create" 
+                    onSuccess={handleSuccess}
+                    onCancel={handleCancel}
+                  />
+                </CardContent>
+              </Card>
+            )}
+
+            {activeTab === 'edit' && editingClient && (
+              <Card>
+                {/* <br/> */}
+                <CardContent className="p-4 md:p-6">
                   <ClientForm 
                     mode="edit" 
                     client={editingClient}
@@ -119,9 +121,9 @@ export default function ClientManagementPage() {
                   />
                 </CardContent>
               </Card>
-            </TabsContent>
-          )}
-        </Tabs>
+            )}
+          </div>
+        </div>
       </Main>
     </RoleProtectedRoute>
   )
