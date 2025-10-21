@@ -367,10 +367,7 @@ export function ScheduleList({ onEdit }: ScheduleListProps) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleView(schedule)}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
+                      
                         {schedule.status === 'scheduled' && (
                           <DropdownMenuItem onClick={() => handleStart(schedule)}>
                             <Clock className="mr-2 h-4 w-4" />

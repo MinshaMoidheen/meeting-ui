@@ -178,10 +178,7 @@ export function ClientList({ onEdit }: ClientListProps) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleView(client)}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
+                       
                         <DropdownMenuItem onClick={() => onEdit(client)}>
                           <Edit className="mr-2 h-4 w-4" />
                           Edit Client

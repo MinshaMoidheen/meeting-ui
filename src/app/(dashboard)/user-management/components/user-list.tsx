@@ -152,10 +152,7 @@ export function UserList({ onEdit, onRefetch }: UserListProps) {
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
+                       
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           onClick={() => handleDelete(user._id, user.email)}
@@ -201,10 +198,7 @@ export function UserList({ onEdit, onRefetch }: UserListProps) {
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Details
-                      </DropdownMenuItem>
+                     
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={() => handleDelete(user._id, user.email)}

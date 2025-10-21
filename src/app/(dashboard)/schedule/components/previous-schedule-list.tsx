@@ -333,10 +333,7 @@ export function PreviousScheduleList({ onEdit }: PreviousScheduleListProps) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleView(schedule)}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
+                        
                         <DropdownMenuItem onClick={() => handleReschedule(schedule)}>
                           <Calendar className="mr-2 h-4 w-4" />
                           Reschedule

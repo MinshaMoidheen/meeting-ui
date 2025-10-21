@@ -244,10 +244,7 @@ export function ClientAttendeesList({ onEdit }: ClientAttendeesListProps) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleView(attendee)}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
+                       
                         <DropdownMenuItem onClick={() => handleCheckIn(attendee)}>
                           <UserCheck className="mr-2 h-4 w-4" />
                           Check In
