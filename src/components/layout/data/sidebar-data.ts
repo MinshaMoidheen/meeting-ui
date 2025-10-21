@@ -19,7 +19,7 @@ import {
   IconCalendar,
   IconUpload,
 } from '@tabler/icons-react'
-import { AudioWaveform, Command, GalleryVerticalEnd, BookOpen, CalendarDays, Clock, History, Play, Upload } from 'lucide-react'
+import { AudioWaveform, Command, GalleryVerticalEnd, BookOpen, CalendarDays, Clock, History, Play, Upload, Download } from 'lucide-react'
 import { type SidebarData } from '../types'
 
 export type UserRole = 'user' | 'admin' | 'superadmin'
@@ -94,17 +94,23 @@ const allSidebarItems: SidebarItem[] = [
     allowedRoles: ['admin', 'superadmin'],
   },
   {
-    title: 'Settings',
-    url: '/settings',
-    icon: IconSettings,
-    allowedRoles: ['user', 'admin', 'superadmin'],
+    title: 'Export Data',
+    url: '/export',
+    icon: Download,
+    allowedRoles: ['admin', 'superadmin'],
   },
-  {
-    title: 'Help Center',
-    url: '/help-center',
-    icon: IconHelp,
-    allowedRoles: ['user', 'admin', 'superadmin'],
-  },
+  // {
+  //   title: 'Settings',
+  //   url: '/settings',
+  //   icon: IconSettings,
+  //   allowedRoles: ['user', 'admin', 'superadmin'],
+  // },
+  // {
+  //   title: 'Help Center',
+  //   url: '/help-center',
+  //   icon: IconHelp,
+  //   allowedRoles: ['user', 'admin', 'superadmin'],
+  // },
 ]
 
 // Function to get sidebar data based on user role
